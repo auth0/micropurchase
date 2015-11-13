@@ -1,0 +1,11 @@
+<h1>Bids for "<%= @auction.title %>"</h1>
+
+<a href="/auctions/<%= @auction.id %>">« Back to auction</a>
+
+<div class="usa-grid-full">
+  <hr class='usa-size-one-whole'>
+  <% @auction.bids.each do |bid| %>
+    <% binding.pry %>
+    <hr>
+  <% end %>
+</div>
