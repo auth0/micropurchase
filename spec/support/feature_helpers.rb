@@ -7,28 +7,50 @@ def create_bidless_auction(end_datetime: Time.now + 3.days)
     issue_url: 'https://github.com/18F/calc/issues/255',
     github_repo: 'https://github.com/18F/calc'
   })
-  @bidder = User.create(
-    github_id: 'uid',
-    duns_number: 'duns',
-    name: 'Bob the Bidder'
-  )
+  @bidders = [
+    User.create(
+      github_id: 'uid',
+      duns_number: 'duns',
+      name: 'Bob the Bidder'
+    ),
+    User.create(
+      github_id: 'uid_2',
+      duns_number: 'duns_2',
+      name: 'Mary the Maker'
+    ),
+    User.create(
+      github_id: 'uid_3',
+      duns_number: 'duns_3',
+      name: 'Carl the Contractor'
+    )
+  ]
 
-  return @auction, @bidder
+
+  return @auction, @bidders
 end
 
 def create_current_auction
-  @auction, @bidder = create_bidless_auction
-  @auction.bids.create(bidder: @bidder, amount: 1000)
+  @auction, @bidders = create_bidless_auction
+  @bidders.each_with_index do |bidder, index|
+    increment = index * 10
+    @auction.bids.create(bidder: bidder, amount: 3499 - increment)
+  end
 end
 
 def create_closed_auction
-  @auction, @bidder = create_bidless_auction(end_datetime: Time.now - 1.days)
-  @auction.bids.create(bidder: @bidder, amount: 1000)
+  @auction, @bidders = create_bidless_auction(end_datetime: Time.now - 1.days)
+  @bidders.each_with_index do |bidder, index|
+    increment = index * 10
+    @auction.bids.create(bidder: bidder, amount: 3499 - increment)
+  end
 end
 
 def create_running_auction
-  @auction, @bidder = create_bidless_auction(end_datetime: Time.now + 1.days)
-  @auction.bids.create(bidder: @bidder, amount: 1000)
+  @auction, @bidders = create_bidless_auction(end_datetime: Time.now + 1.days)
+  @bidders.each_with_index do |bidder, index|
+    increment = index * 10
+    @auction.bids.create(bidder: bidder, amount: 3499 - increment)
+  end
 end
 
 def sign_in_admin

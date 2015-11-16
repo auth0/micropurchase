@@ -11,7 +11,12 @@ RSpec.feature "AdminAuctions", type: :feature do
     expect(page).not_to have_text('must be an admin')
     expect(page).to have_text(@auction.title)
     click_on(@auction.title)
-    expect(page).to have_text('$1,000')
+    auction = Presenter::Auction.new(@auction)
+    current_bid_amount = ApplicationController.helpers.number_to_currency(
+      auction.current_bid.amount
+    )
+
+    expect(page).to have_text(current_bid_amount)
     expect(page).to have_text(@auction.description)
   end
 
