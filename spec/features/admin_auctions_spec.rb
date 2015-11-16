@@ -37,7 +37,8 @@ RSpec.feature "AdminAuctions", type: :feature do
     expect(page).to have_text(@auction.title)
     expect(page).to have_text("Build the micropurchase thing")
     expect(page).to have_text(
-      Presenter::DcTime.convert(Time.now + 3.days).beginning_of_day.to_s(:long)
+      Presenter::DcTime.convert(Time.now + 3.days).
+        beginning_of_day.strftime(Presenter::DcTime::FORMAT)
     )
   end
 
