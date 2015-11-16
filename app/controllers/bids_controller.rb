@@ -3,7 +3,7 @@ class BidsController < ApplicationController
 
   def index
     @auction = Presenter::Auction.new(
-      Auction.joins(:bids, :bidders).find(params[:auction_id])
+      Auction.includes(:bids, :bidders).find(params[:auction_id])
     )
   end
 

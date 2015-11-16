@@ -85,4 +85,40 @@ RSpec.feature "bidder interacts with auction", type: :feature do
     expect(page).to have_content("No bids yet.")
   end
 
+  scenario "Viewing bid history for running auction" do
+    create_running_auction
+    path = "/auctions/#{@auction.id}/bids"
+    visit path
+    expect(page).to have_content("[Name witheld until the auction ends]")
+    bids = @auction.bids
+    bids.each do |bid|
+      unredacted_bidder_name = bid.bidder.name
+      bid = Presenter::Bid.new(bid)
+
+      expect(page).not_to have_content(unredacted_bidder_name)
+      expect(page).to(
+        have_content(
+          ApplicationController.helpers.number_to_currency(bid.amount)
+        )
+      )
+    end
+  end
+
+  scenario "Viewing bid history for a closed auction" do
+    create_closed_auction
+    path = "/auctions/#{@auction.id}/bids"
+    visit path
+    bids = @auction.bids
+    bids.each do |bid|
+      unredacted_bidder_name = bid.bidder.name
+      bid = Presenter::Bid.new(bid)
+
+      expect(page).to have_content(unredacted_bidder_name)
+      expect(page).to(
+        have_content(
+          ApplicationController.helpers.number_to_currency(bid.amount)
+        )
+      )
+    end
+  end
 end

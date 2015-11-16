@@ -2,10 +2,23 @@
 
 <a href="/auctions/<%= @auction.id %>">« Back to auction</a>
 
-<div class="usa-grid-full">
-  <hr class='usa-size-one-whole'>
-  <% @auction.bids.each do |bid| %>
-    <% binding.pry %>
-    <hr>
-  <% end %>
-</div>
+<h2>Here are the current issues open for bidding:</h2>
+
+<table class="usa-table-borderless">
+  <thead>
+    <tr>
+      <th scope="col">Bidder</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Date (Eastern Standard Time)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @auction.bids.each do |bid| %>
+      <tr>
+        <td><%= bid.bidder_name %></td>
+        <td><%= number_to_currency(bid.amount) %></td>
+        <td><%= Presenter::DcTime.convert_and_format(bid.created_at) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
